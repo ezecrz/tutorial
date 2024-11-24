@@ -9,8 +9,9 @@ function LoadData($file)
 	// Leer las líneas del fichero
 	$lines = file($file);
 	$data = array();
-	foreach($lines as $line)
+	foreach($lines as $line){
 		$data[] = explode(';',trim($line));
+	}
 	return $data;
 }
 
@@ -18,15 +19,17 @@ function LoadData($file)
 function BasicTable($header, $data)
 {
 	// Cabecera
-	foreach($header as $col)
+	foreach($header as $col){
 		$this->Cell(40,7,$col,1);
 	$this->Ln();
+	}
 	// Datos
-	foreach($data as $row)
+	foreach($data as $row){
 	{
 		foreach($row as $col)
 			$this->Cell(40,6,$col,1);
 		$this->Ln();
+	}
 	}
 }
 
@@ -36,9 +39,10 @@ function ImprovedTable($header, $data)
 	// Anchuras de las columnas
 	$w = array(40, 35, 45, 40);
 	// Cabeceras
-	for($i=0;$i<count($header);$i++)
+	for($i=0;$i<count($header);$i++){
 		$this->Cell($w[$i],7,$header[$i],1,0,'C');
 	$this->Ln();
+	}
 	// Datos
 	foreach($data as $row)
 	{
@@ -63,9 +67,10 @@ function FancyTable($header, $data)
 	$this->SetFont('','B');
 	// Cabecera
 	$w = array(40, 35, 45, 40);
-	for($i=0;$i<count($header);$i++)
+	for($i=0;$i<count($header);$i++){
 		$this->Cell($w[$i],7,$header[$i],1,0,'C',true);
 	$this->Ln();
+	}
 	// Restauración de colores y fuentes
 	$this->SetFillColor(224,235,255);
 	$this->SetTextColor(0);
