@@ -8,39 +8,42 @@ protected $I = 0;
 protected $U = 0;
 protected $HREF = '';
 
-function WriteHTML($html)
-{
-	// Intérprete de HTML
-	$html = str_replace("\n",' ',$html);
-	$a = preg_split('/<(.*)>/U',$html,-1,PREG_SPLIT_DELIM_CAPTURE);
-	foreach($a as $i=>$e)
-	{
-		if($i%2==0)
-		{
-			// Text
-			if($this->HREF)
-				$this->PutLink($this->HREF,$e);
-			else
-				$this->Write(5,$e);
-		}
-		else
-		{
-			// Etiqueta
-			if($e[0]=='/')
-				$this->CloseTag(strtoupper(substr($e,1)));
-			else
-			{
-				// Extraer atributos
-				$a2 = explode(' ',$e);
-				$tag = strtoupper(array_shift($a2));
-				$attr = array();
-				foreach($a2 as $v)
-				{
-					if(preg_match('/([^=]*)=["\']?([^"\']*)/',$v,$a3))
-						$attr[strtoupper($a3[1])] = $a3[2];
-				}
-				$this->OpenTag($tag,$attr);
-			}
+function WriteHTML($html) {
+    $html = str_replace("\n", ' ', $html);
+
+    // Regular expression to match HTML tags and attributes
+    $tagPattern = '/<(\/?)([^>]+)>/';
+
+    foreach (preg_split($tagPattern, $html, -1, PREG_SPLIT_DELIM_CAPTURE) as $token) {
+        if ($token[0] === '/') {
+            // Closing tag
+            $this->CloseTag(strtoupper($token[1]));
+        } elseif ($token[0] === '<') {
+            // Opening tag
+            // Extract tag name and attributes
+            preg_match('/^([^ ]+) *(.*)$/', $token[1], $matches);
+            $tagName = strtoupper($matches[1]);
+            $attributes = [];
+
+            // Parse attributes
+            if (isset($matches[2])) {
+                preg_match_all('/([^ =]+)="([^"]*)"/', $matches[2], $attrMatches, PREG_SET_ORDER);
+                foreach ($attrMatches as $attrMatch) {
+                    $attributes[$attrMatch[1]] = $attrMatch[2];
+                }
+            }
+
+            $this->OpenTag($tagName, $attributes);
+        } else {
+            // Text
+            if ($this->HREF) {
+                $this->PutLink($this->HREF, $token);
+            } else {
+                $this->Write(5, $token);
+            }
+        }
+    }
+}
 		}
 	}
 }
@@ -89,20 +92,20 @@ function PutLink($URL, $txt)
 }
 }
 
-$html = 'Ahora puede imprimir fácilmente texto mezclando diferentes estilos: <b>negrita</b>, <i>itálica</i>,
-<u>subrayado</u>, o ¡ <b><i><u>todos a la vez</u></i></b>!<br><br>También puede incluir enlaces en el
+$html = 'Ahora puede imprimir fÃ¡cilmente texto mezclando diferentes estilos: <b>negrita</b>, <i>itÃ¡lica</i>,
+<u>subrayado</u>, o Â¡ <b><i><u>todos a la vez</u></i></b>!<br><br>TambiÃ©n puede incluir enlaces en el
 texto, como <a href="http://www.fpdf.org">www.fpdf.org</a>, o en una imagen: pulse en el logotipo.';
 
 $pdf = new PDF();
-// Primera página
+// Primera pÃ¡gina
 $pdf->AddPage();
 $pdf->SetFont('Arial','',20);
-$pdf->Write(5,'Para saber qué hay de nuevo en este tutorial, pulse ');
+$pdf->Write(5,'Para saber quÃ© hay de nuevo en este tutorial, pulse ');
 $pdf->SetFont('','U');
 $link = $pdf->AddLink();
-$pdf->Write(5,'aquí',$link);
+$pdf->Write(5,'aquÃ­',$link);
 $pdf->SetFont('');
-// Segunda página
+// Segunda pÃ¡gina
 $pdf->AddPage();
 $pdf->SetLink($link);
 $pdf->Image('logo.png',10,12,30,0,'','http://www.fpdf.org');
