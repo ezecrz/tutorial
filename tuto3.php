@@ -33,7 +33,7 @@ class PDF extends FPDF {
         $this->Ln(4);
     }
 
-    function ChapterBody($file) {
+    public function ChapterBody($file) {
         $txt = file_get_contents($file);
         $this->SetFont('Times','',12);
         $this->MultiCell(0,5,$txt);
@@ -42,7 +42,7 @@ class PDF extends FPDF {
         $this->Cell(0,5,'(fin del extracto)');
     }
 
-    function PrintChapter($num, $title, $file) {
+    public function PrintChapter($num, $title, $file) {
         $this->AddPage();
         $this->ChapterTitle($num,$title);
         $this->ChapterBody($file);
