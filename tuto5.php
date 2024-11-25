@@ -24,12 +24,13 @@ function BasicTable($header, $data)
 	$this->Ln();
 	}
 	// Datos
-	foreach($data as $row){
+	foreach($data as $row)
 	{
-		foreach($row as $col)
+		foreach($row as $col){
 			$this->Cell(40,6,$col,1);
 		$this->Ln();
-	}
+		}
+	
 	}
 }
 
