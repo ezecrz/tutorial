@@ -19,7 +19,7 @@ class PDF extends FPDF {
         $this->Ln(10);
     }
 
-    function Footer() {
+    public function Footer() {
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
         $this->SetTextColor(128);
