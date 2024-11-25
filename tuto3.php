@@ -26,7 +26,7 @@ class PDF extends FPDF {
         $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
     }
 
-    function ChapterTitle($num, $label) {
+    public function ChapterTitle($num, $label) {
         $this->SetFont('Arial','',12);
         $this->SetFillColor(200,220,255);
         $this->Cell(0,6,"Capítulo $num : $label",0,1,'L',true);
